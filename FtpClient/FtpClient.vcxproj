@@ -68,7 +68,7 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy /D /Y /C /E "$(SolutionDir)thridpart\common" "$(TargetDir)"
-xcopy /D /Y /C /E "$(SolutionDir)thridpart\Debug" "$(TargetDir)"</Command>
+xcopy /D /Y /C /E "$(SolutionDir)thridpart\bin_d" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -81,7 +81,7 @@ xcopy /D /Y /C /E "$(SolutionDir)thridpart\Debug" "$(TargetDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /D /Y /C /E "$(SolutionDir)thridpart\common" "$(TargetDir)"
-xcopy /D /Y /C /E "$(SolutionDir)thridpart\Release" "$(TargetDir)"</Command>
+xcopy /D /Y /C /E "$(SolutionDir)thridpart\bin" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="Configuration">

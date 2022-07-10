@@ -1,4 +1,4 @@
 ﻿.vs
 Debug
-FtpClient/Release
 Release
+*.vcxproj.user
