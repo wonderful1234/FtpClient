@@ -111,26 +111,26 @@ xcopy /D /Y /C /E "$(SolutionDir)thridpart\Release" "$(TargetDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="framelesshelper.cpp" />
-    <ClCompile Include="FtpControl.cpp" />
-    <ClCompile Include="FtpTask.cpp" />
-    <ClCompile Include="PopWidgetBase.cpp" />
     <QtRcc Include="FtpClient.qrc" />
-    <QtUic Include="FtpClient.ui" />
-    <QtMoc Include="FtpClient.h" />
-    <ClCompile Include="FtpClient.cpp" />
-    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="PopWidgetBase.h" />
+    <ClInclude Include="src\DataModel.h" />
+    <ClInclude Include="src\FtpTask.h" />
+    <QtMoc Include="src\PopWidgetBase.h" />
+    <QtMoc Include="src\FtpControl.h" />
+    <QtMoc Include="src\FtpClient.h" />
+    <QtMoc Include="src\framelesshelper.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="framelesshelper.h" />
+    <ClCompile Include="src\framelesshelper.cpp" />
+    <ClCompile Include="src\FtpClient.cpp" />
+    <ClCompile Include="src\FtpControl.cpp" />
+    <ClCompile Include="src\FtpTask.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\PopWidgetBase.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataModel.h" />
-    <QtMoc Include="FtpControl.h" />
-    <ClInclude Include="FtpTask.h" />
+    <QtUic Include="src\FtpClient.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

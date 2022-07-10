@@ -26,50 +26,52 @@
     <QtRcc Include="FtpClient.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtUic Include="FtpClient.ui">
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\DataModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FtpTask.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\framelesshelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FtpClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FtpControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FtpTask.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PopWidgetBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\framelesshelper.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\FtpClient.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\FtpControl.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\PopWidgetBase.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="src\FtpClient.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtMoc Include="FtpClient.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <ClCompile Include="FtpClient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PopWidgetBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="framelesshelper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FtpTask.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FtpControl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="PopWidgetBase.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="framelesshelper.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="FtpControl.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="FtpTask.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DataModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
