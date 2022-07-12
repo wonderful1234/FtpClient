@@ -3,5 +3,6 @@
         <file>res/5.png</file>
         <file>res/7.png</file>
         <file>res/fileUpload.png</file>
+        <file>res/FTP.ico</file>
     </qresource>
 </RCC>

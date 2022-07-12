@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>FtpClient</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../FtpClient.qrc">
+    <normaloff>:/FtpClient/res/FTP.ico</normaloff>:/FtpClient/res/FTP.ico</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">QWidget{font-family:&quot;微软雅黑&quot;;}</string>
   </property>

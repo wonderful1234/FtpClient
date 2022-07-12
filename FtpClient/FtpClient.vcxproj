@@ -114,6 +114,7 @@ xcopy /D /Y /C /E "$(SolutionDir)thridpart\bin" "$(TargetDir)"</Command>
     <QtRcc Include="FtpClient.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="src\DataModel.h" />
     <ClInclude Include="src\FtpTask.h" />
     <QtMoc Include="src\PopWidgetBase.h" />
@@ -131,6 +132,12 @@ xcopy /D /Y /C /E "$(SolutionDir)thridpart\bin" "$(TargetDir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="src\FtpClient.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FtpClient.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\FTP.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
