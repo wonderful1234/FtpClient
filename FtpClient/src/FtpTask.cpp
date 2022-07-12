@@ -14,34 +14,10 @@ FtpTask::FtpTask(FtpControl * control, const FtpConfig& config,  const QString &
 void FtpTask::run()
 {
 	bool success = false;
-	if (!m_ftpConfig.ip.isEmpty() || m_localFilePath.isEmpty())
+	success = listInfo();
+	if (success)
 	{
-		if (QFile::exists(m_localFilePath))
-		{
-			CURL* curl = curl_easy_init();
-			if (curl)
-			{
-				std::ifstream fileStream;
-				fileStream.open(m_localFilePath.toStdWString(), std::ifstream::in | std::ifstream::binary);
-				QFileInfo info(m_localFilePath);
-				QString url=ParseURL(info.fileName());
-				curl_easy_setopt(curl, CURLOPT_URL, url.toLocal8Bit().data());
-				curl_easy_setopt(curl, CURLOPT_PORT, m_ftpConfig.port.toUInt());
-				curl_easy_setopt(curl, CURLOPT_USERPWD, QString("%1:%2").arg(m_ftpConfig.userName).arg(m_ftpConfig.password).toLocal8Bit().data());
-				curl_easy_setopt(curl, CURLOPT_READFUNCTION, FtpTask::ReadFromFileCallback);
-				curl_easy_setopt(curl, CURLOPT_READDATA, &fileStream);
-				curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
-				curl_easy_setopt(curl, CURLOPT_INFILESIZE_LARGE, static_cast<curl_off_t>(info.size()));
-				curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, FtpTask::progressCallback);
-				curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, this);
-				curl_easy_setopt(curl, CURLOPT_FTP_CREATE_MISSING_DIRS, 1);
-				curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
-				CURLcode res = curl_easy_perform(curl);
-				success = CURLE_OK == res;
-				fileStream.close();
-			}
-			curl_easy_cleanup(curl);
-		}
+		success = uploadFile();
 	}
 	m_control->taskFinish(this, success);
 
@@ -83,4 +59,44 @@ size_t FtpTask::ReadFromFileCallback(void * ptr, size_t size, size_t nmemb, void
 		return pFileStream->gcount();
 	}
 	return 0;
+}
+
+bool FtpTask::listInfo()
+{
+	return true;
+}
+
+bool FtpTask::uploadFile()
+{
+	bool success = false;
+	if (!m_ftpConfig.ip.isEmpty() || m_localFilePath.isEmpty())
+	{
+		if (QFile::exists(m_localFilePath))
+		{
+			CURL* curl = curl_easy_init();
+			if (curl)
+			{
+				std::ifstream fileStream;
+				fileStream.open(m_localFilePath.toStdWString(), std::ifstream::in | std::ifstream::binary);
+				QFileInfo info(m_localFilePath);
+				QString url = ParseURL(info.fileName());
+				curl_easy_setopt(curl, CURLOPT_URL, url.toLocal8Bit().data());
+				curl_easy_setopt(curl, CURLOPT_PORT, m_ftpConfig.port.toUInt());
+				curl_easy_setopt(curl, CURLOPT_USERPWD, QString("%1:%2").arg(m_ftpConfig.userName).arg(m_ftpConfig.password).toLocal8Bit().data());
+				curl_easy_setopt(curl, CURLOPT_READFUNCTION, FtpTask::ReadFromFileCallback);
+				curl_easy_setopt(curl, CURLOPT_READDATA, &fileStream);
+				curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
+				curl_easy_setopt(curl, CURLOPT_INFILESIZE_LARGE, static_cast<curl_off_t>(info.size()));
+				curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, FtpTask::progressCallback);
+				curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, this);
+				curl_easy_setopt(curl, CURLOPT_FTP_CREATE_MISSING_DIRS, 1);
+				curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
+				CURLcode res = curl_easy_perform(curl);
+				success = CURLE_OK == res;
+				fileStream.close();
+			}
+			curl_easy_cleanup(curl);
+		}
+	}
+	return success;
 }
