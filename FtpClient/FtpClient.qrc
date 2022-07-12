@@ -1,4 +1,7 @@
 <RCC>
-    <qresource prefix="FtpClient">
+    <qresource prefix="/FtpClient">
+        <file>res/5.png</file>
+        <file>res/7.png</file>
+        <file>res/fileUpload.png</file>
     </qresource>
 </RCC>
