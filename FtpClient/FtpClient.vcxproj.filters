@@ -63,6 +63,9 @@
     <ClCompile Include="src\Log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\SiteManagement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\framelesshelper.h">
@@ -77,9 +80,15 @@
     <QtMoc Include="src\PopWidgetBase.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="src\SiteManagement.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="src\FtpClient.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\SiteManagement.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

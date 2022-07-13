@@ -11,6 +11,7 @@ class FtpClient : public PopWidgetBase
 
 public:
     FtpClient(QWidget *parent = Q_NULLPTR);
+	~FtpClient();
 protected:
 	virtual void dragEnterEvent(QDragEnterEvent *event) override;
 	virtual  void dropEvent(QDropEvent *event) override;

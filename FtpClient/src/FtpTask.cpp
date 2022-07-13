@@ -69,7 +69,7 @@ bool FtpTask::listInfo()
 	CURL *curl = curl_easy_init();
 	if (curl)
 	{
-		Log::getInstance()->logInfo(u8"开始连接服务器......");
+		Log::getInstance()->logInfo(u8"开始连接服务器");
 		QString url = ParseURL("");
 		curl_easy_setopt(curl, CURLOPT_URL, url.toLocal8Bit().data());
 		curl_easy_setopt(curl, CURLOPT_PORT, ports);
@@ -80,6 +80,10 @@ bool FtpTask::listInfo()
 		res = curl_easy_perform(curl);
 	}
 	curl_easy_cleanup(curl);
+	if(CURLE_OK != res)
+		Log::getInstance()->logWarn(u8"连接服务器失败");
+	else 
+		Log::getInstance()->logInfo(u8"连接服务器成功");
 	return CURLE_OK == res;
 }
 
@@ -93,6 +97,7 @@ bool FtpTask::uploadFile()
 			CURL* curl = curl_easy_init();
 			if (curl)
 			{
+				Log::getInstance()->logInfo(u8"开始上传文件");
 				std::ifstream fileStream;
 				fileStream.open(m_localFilePath.toStdWString(), std::ifstream::in | std::ifstream::binary);
 				QFileInfo info(m_localFilePath);
@@ -111,9 +116,15 @@ bool FtpTask::uploadFile()
 				CURLcode res = curl_easy_perform(curl);
 				success = CURLE_OK == res;
 				fileStream.close();
+				if(success)
+					Log::getInstance()->logInfo(u8"文件上传成功");
+				else
+					Log::getInstance()->logWarn(u8"文件上传失败");
 			}
 			curl_easy_cleanup(curl);
 		}
+		else
+			Log::getInstance()->logWarn(u8"文件不存在");
 	}
 	return success;
 }

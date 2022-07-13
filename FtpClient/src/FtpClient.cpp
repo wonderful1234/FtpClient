@@ -2,6 +2,7 @@
 #include "ui_FtpClient.h"
 #include <QMimeData>
 #include <QFileDialog>
+#include "SiteManagement.h"
 FtpClient::FtpClient(QWidget *parent)
 	: PopWidgetBase(parent), ui(new Ui::FtpClient)
 {
@@ -18,6 +19,15 @@ FtpClient::FtpClient(QWidget *parent)
 
 	connect(ui->btnClose, &QPushButton::clicked, this, [&]() {
 		close();
+	});
+
+	connect(ui->btnOpen, &QPushButton::clicked, this, [&]() {
+		SiteManagement manage(this);
+		if (manage.exec())
+		{
+
+		}
+
 	});
 
 	connect(ui->toolButton, &QPushButton::clicked, this, [&]() {
@@ -41,6 +51,11 @@ FtpClient::FtpClient(QWidget *parent)
 		ui->stackedWidget->setCurrentIndex(0);
 
 	});
+}
+
+FtpClient::~FtpClient()
+{
+	delete ui;
 }
 
 void FtpClient::dragEnterEvent(QDragEnterEvent * event)

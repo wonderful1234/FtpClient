@@ -32,12 +32,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">
     <QtInstall>5.14.2</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;sql;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'" Label="QtSettings">
     <QtInstall>5.14.2</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;sql;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -118,6 +118,7 @@ xcopy /D /Y /C /E "$(SolutionDir)thridpart\bin" "$(TargetDir)"</Command>
     <ClInclude Include="src\DataModel.h" />
     <ClInclude Include="src\FtpTask.h" />
     <ClInclude Include="src\Log.h" />
+    <QtMoc Include="src\SiteManagement.h" />
     <QtMoc Include="src\PopWidgetBase.h" />
     <QtMoc Include="src\FtpControl.h" />
     <QtMoc Include="src\FtpClient.h" />
@@ -131,9 +132,11 @@ xcopy /D /Y /C /E "$(SolutionDir)thridpart\bin" "$(TargetDir)"</Command>
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\PopWidgetBase.cpp" />
+    <ClCompile Include="src\SiteManagement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="src\FtpClient.ui" />
+    <QtUic Include="src\SiteManagement.ui" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="FtpClient.rc" />
