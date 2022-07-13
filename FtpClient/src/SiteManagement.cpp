@@ -2,14 +2,15 @@
 #include "ui_SiteManagement.h"
 #include <QStandardPaths>
 #include <QSqlQuery>
-#include <QUuid>
+#include <QDir>
 SiteManagement::SiteManagement(QWidget *parent)
 	: PopWidgetBase(parent), ui(new Ui::SiteManagement)
 {
 	ui->setupUi(this);
-
+	init();
+	initFtp();
 	connect(ui->listWidget, &QListWidget::currentItemChanged, this, [&](QListWidgetItem *current, QListWidgetItem *previous) {
-		m_currentId =current->data(idRole).toString();
+		m_currentId =current->data(idRole).toInt();
 		m_currentConfig=m_listConfig.value(m_currentId);
 		ui->FtpType->setCurrentIndex(static_cast<int>(m_currentConfig.ftpType));
 		ui->lineEdit_ip->setText(m_currentConfig.ip);
@@ -33,7 +34,7 @@ SiteManagement::SiteManagement(QWidget *parent)
 	connect(ui->btnAdd, &QPushButton::clicked, this, [&]() {
 		clearUI();
 		m_currentConfig = FtpConfig();
-		m_currentId = "";
+		m_currentId =0;
 	});
 }
 
@@ -44,7 +45,11 @@ SiteManagement::~SiteManagement()
 
 void SiteManagement::init()
 {
-	m_dbPath=QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/"+ DBName;
+	QString dir = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+	QDir dirPath(dir);
+	if (!dirPath.exists())
+		dirPath.mkdir(dir);
+	m_dbPath= dir + "/"+ DBName;
 	creatTable();
 
 }
@@ -57,12 +62,12 @@ void SiteManagement::creatTable()
 		QSqlQuery query(db);
 		query.exec(QString("CREATE TABLE IF NOT EXISTS %1 "
 			"(ip TEXT,"
-			"(username TEXT,"
-			"(password TEXT,"
-			"(port TEXT,"
-			"(type INTEGER,"
-			"(id TEXT,"
-			"PRIMARY KEY (\"ip\"),(\"username\"),(\"password\"),(\"port\"),(\"type\"));").arg(TableName));
+			"username TEXT,"
+			"password TEXT,"
+			"port TEXT,"
+			"type INTEGER,"
+			"id INTEGER,"
+			"PRIMARY KEY (\"id\"));").arg(TableName));
 		db.close();
 	}
 }
@@ -105,9 +110,9 @@ void SiteManagement::initFtp()
 				config.password= query.value("password").toString();
 				config.port= query.value("port").toString();
 				config.ftpType= (FtpType)query.value("type").toInt();
-				m_listConfig.insert(query.value("id").toString(), config);
+				m_listConfig.insert(query.value("id").toInt(), config);
 				QListWidgetItem* item = new QListWidgetItem();
-				item->setData(idRole, query.value("id").toString());
+				item->setData(idRole, query.value("id").toInt());
 				item->setText(config.ip);
 				ui->listWidget->addItem(item);
 			}
@@ -133,18 +138,22 @@ void SiteManagement::saveConfig()
 	m_currentConfig.password = ui->lineEdit_password->text();
 	m_currentConfig.port = ui->lineEdit_port->text();
 	m_currentConfig.userName = ui->lineEdit_port->text();
-	if (m_currentId.isEmpty())
+	if (m_currentId==0)
 	{
-		if (checkExits)
+		if (checkExits())
 		{
-			m_currentId = QUuid::createUuid().toString();
+			
 			insertConfig();
+		}
+		else
+		{
+			m_currentConfig = FtpConfig();
 		}
 
 	}
 	else
 	{
-		if (checkExits)
+		if (checkExits())
 		{
 			updateConfig();
 		}
@@ -163,6 +172,23 @@ bool SiteManagement::checkRight()
 
 void SiteManagement::insertConfig()
 {
+	QSqlDatabase db;
+	if (openDatabase(db, m_dbPath))
+	{
+		QSqlQuery query(db);
+		query.prepare(QString(
+			"INSERT INTO %1 (ip, username, password, port, type) "
+			"values(:ip,:username,:password,:port,:type)")
+			.arg(TableName));
+		query.bindValue(":ip", m_currentConfig.ip);
+		query.bindValue(":username", m_currentConfig.userName);
+		query.bindValue(":password", m_currentConfig.password);
+		query.bindValue(":port", m_currentConfig.port);
+		query.bindValue(":type", static_cast<int>(m_currentConfig.ftpType));
+		query.exec();
+		db.close();
+	}
+	
 }
 
 void SiteManagement::updateConfig()

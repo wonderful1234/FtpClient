@@ -29,7 +29,7 @@ private:
 private:
 	Ui::SiteManagement* ui;
 	QString m_dbPath;
-	QMap<QString,FtpConfig> m_listConfig;
+	QMap<int,FtpConfig> m_listConfig;
 	FtpConfig m_currentConfig;
-	QString m_currentId;
+	int m_currentId = 0;
 };
