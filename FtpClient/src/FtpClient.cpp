@@ -12,7 +12,6 @@ FtpClient::FtpClient(QWidget *parent)
 	installEventFilter(this);
 	ui->toolButton->installEventFilter(this);
 	m_ftpControl = new FtpControl(this);
-
 	connect(ui->btnMine, &QPushButton::clicked, this, [&]() {
 		showMinimized();
 	});

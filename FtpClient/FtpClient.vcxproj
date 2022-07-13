@@ -64,7 +64,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libcurl_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcurl_d.lib;spdlogd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /D /Y /C /E "$(SolutionDir)thridpart\common" "$(TargetDir)"
@@ -77,7 +77,7 @@ xcopy /D /Y /C /E "$(SolutionDir)thridpart\bin_d" "$(TargetDir)"</Command>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcurl.lib;spdlog.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /D /Y /C /E "$(SolutionDir)thridpart\common" "$(TargetDir)"
@@ -117,6 +117,7 @@ xcopy /D /Y /C /E "$(SolutionDir)thridpart\bin" "$(TargetDir)"</Command>
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\DataModel.h" />
     <ClInclude Include="src\FtpTask.h" />
+    <ClInclude Include="src\Log.h" />
     <QtMoc Include="src\PopWidgetBase.h" />
     <QtMoc Include="src\FtpControl.h" />
     <QtMoc Include="src\FtpClient.h" />
@@ -127,6 +128,7 @@ xcopy /D /Y /C /E "$(SolutionDir)thridpart\bin" "$(TargetDir)"</Command>
     <ClCompile Include="src\FtpClient.cpp" />
     <ClCompile Include="src\FtpControl.cpp" />
     <ClCompile Include="src\FtpTask.cpp" />
+    <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\PopWidgetBase.cpp" />
   </ItemGroup>

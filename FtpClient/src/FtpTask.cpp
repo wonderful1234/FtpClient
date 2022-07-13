@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <fstream>
+#include "Log.h"
 FtpTask::FtpTask(FtpControl * control, const FtpConfig& config,  const QString & localPath)
 	: m_control(control),m_ftpConfig(config),m_localFilePath(localPath)
 {
@@ -63,13 +64,29 @@ size_t FtpTask::ReadFromFileCallback(void * ptr, size_t size, size_t nmemb, void
 
 bool FtpTask::listInfo()
 {
-	return true;
+	CURLcode res;
+	unsigned ports = m_ftpConfig.port.toUInt();
+	CURL *curl = curl_easy_init();
+	if (curl)
+	{
+		Log::getInstance()->logInfo(u8"开始连接服务器......");
+		QString url = ParseURL("");
+		curl_easy_setopt(curl, CURLOPT_URL, url.toLocal8Bit().data());
+		curl_easy_setopt(curl, CURLOPT_PORT, ports);
+		curl_easy_setopt(curl, CURLOPT_USERPWD, QString("%1:%2").arg(m_ftpConfig.userName).arg(m_ftpConfig.password).toLocal8Bit().data());
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
+		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 5);
+		res = curl_easy_perform(curl);
+	}
+	curl_easy_cleanup(curl);
+	return CURLE_OK == res;
 }
 
 bool FtpTask::uploadFile()
 {
 	bool success = false;
-	if (!m_ftpConfig.ip.isEmpty() || m_localFilePath.isEmpty())
+	if (!m_localFilePath.isEmpty())
 	{
 		if (QFile::exists(m_localFilePath))
 		{
