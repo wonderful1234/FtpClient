@@ -18,7 +18,7 @@ protected:
 	virtual bool eventFilter(QObject * obj, QEvent *event) override;
 private:
     Ui::FtpClient* ui;
-	FtpControl * m_ftpControl;
+	FtpControl * m_ftpControl = nullptr;
 	bool m_currentTool = false;
 	FtpConfig m_currentConfig;
 };

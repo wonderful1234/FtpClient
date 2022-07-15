@@ -13,6 +13,7 @@ FtpTask::FtpTask(FtpControl * control, const FtpConfig& config,  const QString &
 
 void FtpTask::run()
 {
+	
 	bool success = false;
 	success = listInfo();
 	if (success)

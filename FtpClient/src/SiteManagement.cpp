@@ -3,12 +3,13 @@
 #include <QStandardPaths>
 #include <QSqlQuery>
 #include <QDir>
-#include <QSqlError>
+#include <QMessageBox>
 SiteManagement::SiteManagement(QWidget *parent)
 	: PopWidgetBase(parent), ui(new Ui::SiteManagement)
 {
 	ui->setupUi(this);
 	init();
+	initUI();
 	initFtp();
 	connect(ui->listWidget, &QListWidget::itemClicked, this, [&](QListWidgetItem *current) {
 		m_currentId =current->data(idRole).toInt();
@@ -174,6 +175,7 @@ bool SiteManagement::saveConfig()
 		{
 			m_currentConfig = FtpConfig();
 			success = false;
+			QMessageBox::information(this, u8"提示", u8"配置已经存在!!!");
 		}
 
 	}
@@ -225,19 +227,10 @@ void SiteManagement::updateConfig(int id)
 	if (openDatabase(db, m_dbPath))
 	{
 		QSqlQuery query(db);
-		QString sql = "UPDATE %1 set ip = :ip,username = :username,"
-			"password = :password,port = :port,type = :type WHERE id = '%2'";
-		query.prepare(sql.arg(TableName, id));
-		query.bindValue(":ip", m_currentConfig.ip);
-		query.bindValue(":username", m_currentConfig.userName);
-		query.bindValue(":password", m_currentConfig.password);
-		query.bindValue(":port", m_currentConfig.port);
-		query.bindValue(":type", static_cast<int>(m_currentConfig.ftpType));
-		if (!query.exec())
-		{
-			auto a = query.lastError().text();
-			auto b = query.lastQuery();
-		}
+		QString sql = QString(u8"UPDATE %1 set ip=%2,username=%3,password=%4,port=%5,type='%6' WHERE id=%7").arg(TableName)
+			.arg(m_currentConfig.ip).arg(m_currentConfig.userName).arg(m_currentConfig.password).arg(m_currentConfig.port)
+			.arg(static_cast<int>(m_currentConfig.ftpType)).arg(id);
+		query.exec(sql);
 		db.close();
 	}
 }
@@ -267,5 +260,13 @@ void SiteManagement::deleteConfig(int id)
 		query.exec(sql);
 		db.close();
 	}
+}
+
+void SiteManagement::initUI()
+{
+	QRegExpValidator* validator = new QRegExpValidator(ui->lineEdit_port);
+	validator->setRegExp(QRegExp("^[0-9]+$"));
+	ui->lineEdit_port->setValidator(validator);
+	
 }
 

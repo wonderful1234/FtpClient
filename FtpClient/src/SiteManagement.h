@@ -28,6 +28,7 @@ private:
 	void updateConfig(int id);
 	bool checkExits();
 	void deleteConfig(int id);
+	void initUI();
 private:
 	Ui::SiteManagement* ui;
 	QString m_dbPath;

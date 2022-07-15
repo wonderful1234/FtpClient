@@ -7,7 +7,7 @@ FtpControl::FtpControl(QObject *parent)
 }
 FtpControl::~FtpControl()
 {
-
+	
 }
 
 void FtpControl::addTask(const FtpConfig & config, const QString & localPath)

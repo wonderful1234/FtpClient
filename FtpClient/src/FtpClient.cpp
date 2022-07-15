@@ -3,6 +3,8 @@
 #include <QMimeData>
 #include <QFileDialog>
 #include "SiteManagement.h"
+#include <windows.h>
+#include <QMessageBox>
 FtpClient::FtpClient(QWidget *parent)
 	: PopWidgetBase(parent), ui(new Ui::FtpClient)
 {
@@ -20,7 +22,13 @@ FtpClient::FtpClient(QWidget *parent)
 	});
 
 	connect(ui->btnClose, &QPushButton::clicked, this, [&]() {
-		close();
+		if (m_ftpControl)
+		{
+			m_ftpControl->deleteLater();
+			m_ftpControl = nullptr;
+		}
+		this->close();
+		TerminateProcess(GetCurrentProcess(), 0);
 	});
 
 	connect(ui->btnOpen, &QPushButton::clicked, this, [&]() {
@@ -55,6 +63,10 @@ FtpClient::FtpClient(QWidget *parent)
 	connect(m_ftpControl, &FtpControl::signFinished, this, [=](bool success) {
 
 		ui->stackedWidget->setCurrentIndex(0);
+		if(success)
+			QMessageBox::information(this, u8"提示", u8"文件上传成功!!!");
+		else
+			QMessageBox::warning(this, u8"提示", u8"文件上传失败!!!");
 
 	});
 }
