@@ -14,6 +14,7 @@ void FtpControl::addTask(const FtpConfig & config, const QString & localPath)
 {
 	
 		auto task = new FtpTask(this, config,localPath);
+		m_taskLists.append(task);
 		m_threadPool->start(task);
 	
 	
@@ -23,6 +24,7 @@ void FtpControl::taskFinish(FtpTask * task, bool success)
 {
 	if (task)
 	{
+		m_taskLists.removeAll(task);
 		delete task;
 	}
 	emit signFinished(success);

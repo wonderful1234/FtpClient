@@ -17,4 +17,5 @@ signals:
 	void signProgress(double progress);
 private:
 	QThreadPool * m_threadPool;
+	QList<FtpTask*>m_taskLists;
 };

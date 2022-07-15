@@ -68,7 +68,7 @@ bool FtpTask::listInfo()
 	CURL *curl = curl_easy_init();
 	if (curl)
 	{
-		Log::getInstance()->logInfo(u8"开始连接服务器");
+		Log::getInstance()->logInfo(QString(u8"开始连接服务器:%1").arg(m_ftpConfig.ip));
 		QString url = ParseURL("");
 		curl_easy_setopt(curl, CURLOPT_URL, url.toLocal8Bit().data());
 		curl_easy_setopt(curl, CURLOPT_PORT, ports);
@@ -96,7 +96,7 @@ bool FtpTask::uploadFile()
 			CURL* curl = curl_easy_init();
 			if (curl)
 			{
-				Log::getInstance()->logInfo(u8"开始上传文件");
+				Log::getInstance()->logInfo(QString(u8"开始上传文件:%1").arg(m_localFilePath));
 				std::ifstream fileStream;
 				fileStream.open(m_localFilePath.toStdWString(), std::ifstream::in | std::ifstream::binary);
 				QFileInfo info(m_localFilePath);
@@ -124,7 +124,7 @@ bool FtpTask::uploadFile()
 			
 		}
 		else
-			Log::getInstance()->logWarn(u8"文件不存在");
+			Log::getInstance()->logWarn(QString(u8"%1文件不存在").arg(m_localFilePath));
 	}
 	return success;
 }

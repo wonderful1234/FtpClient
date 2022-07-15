@@ -20,4 +20,5 @@ private:
     Ui::FtpClient* ui;
 	FtpControl * m_ftpControl;
 	bool m_currentTool = false;
+	FtpConfig m_currentConfig;
 };

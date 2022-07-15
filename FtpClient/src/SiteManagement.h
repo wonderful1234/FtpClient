@@ -16,15 +16,16 @@ public:
 	SiteManagement(QWidget *parent = nullptr);
 	~SiteManagement();
 	void init();
+	FtpConfig getCurrentConfig();
 private:
 	void creatTable();
 	bool openDatabase(QSqlDatabase& db, const QString & path);
 	void initFtp();
 	void clearUI();
-	void saveConfig();
+	bool saveConfig();
 	bool checkRight();
 	void insertConfig();
-	void updateConfig();
+	void updateConfig(int id);
 	bool checkExits();
 	void deleteConfig(int id);
 private:

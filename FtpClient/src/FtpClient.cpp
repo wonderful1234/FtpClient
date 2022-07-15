@@ -13,6 +13,8 @@ FtpClient::FtpClient(QWidget *parent)
 	installEventFilter(this);
 	ui->toolButton->installEventFilter(this);
 	m_ftpControl = new FtpControl(this);
+	ui->stackedWidget->setCurrentIndex(0);
+	ui->toolButton->hide();
 	connect(ui->btnMine, &QPushButton::clicked, this, [&]() {
 		showMinimized();
 	});
@@ -25,6 +27,9 @@ FtpClient::FtpClient(QWidget *parent)
 		SiteManagement manage(this);
 		if (manage.exec())
 		{
+			m_currentConfig=manage.getCurrentConfig();
+			m_currentConfig.path = "/test";
+			ui->toolButton->show();
 
 		}
 
@@ -35,6 +40,7 @@ FtpClient::FtpClient(QWidget *parent)
 		auto filePath=QFileDialog::getOpenFileName(this, u8"请选择要上传的文件");
 		if (filePath.isEmpty())
 			return;
+		m_ftpControl->addTask(m_currentConfig, filePath);
 		ui->stackedWidget->setCurrentIndex(1);
 		ui->progressBar->setValue(0);
 
@@ -75,6 +81,9 @@ void FtpClient::dropEvent(QDropEvent * event)
 	{
 		auto filePath = event->mimeData()->urls().last().toLocalFile();
 		m_currentTool = false;
+		m_ftpControl->addTask(m_currentConfig, filePath);
+		ui->stackedWidget->setCurrentIndex(1);
+		ui->progressBar->setValue(0);
 	}
 	
 }

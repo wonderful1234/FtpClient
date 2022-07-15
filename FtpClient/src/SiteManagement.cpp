@@ -3,6 +3,7 @@
 #include <QStandardPaths>
 #include <QSqlQuery>
 #include <QDir>
+#include <QSqlError>
 SiteManagement::SiteManagement(QWidget *parent)
 	: PopWidgetBase(parent), ui(new Ui::SiteManagement)
 {
@@ -27,7 +28,8 @@ SiteManagement::SiteManagement(QWidget *parent)
 
 		if (!checkRight())
 			return;
-		saveConfig();
+		if (!saveConfig())
+			return;
 		accept();
 	});
 
@@ -41,6 +43,15 @@ SiteManagement::SiteManagement(QWidget *parent)
 	connect(ui->btnDel, &QPushButton::clicked, this, [&]() {
 		if (m_listConfig.size() == 0)
 			return;
+		if (ui->listWidget->selectedItems().size() <= 0)
+			return;
+		deleteConfig(m_currentId);
+		delete ui->listWidget->currentItem();
+		ui->listWidget->clearSelection();
+		clearUI();
+		m_currentId = 0;
+		m_currentConfig= FtpConfig();
+
 
 	});
 }
@@ -61,6 +72,11 @@ void SiteManagement::init()
 
 }
 
+FtpConfig SiteManagement::getCurrentConfig()
+{
+	return m_currentConfig;
+}
+
 void SiteManagement::creatTable()
 {
 	QSqlDatabase db;
@@ -68,12 +84,12 @@ void SiteManagement::creatTable()
 	{
 		QSqlQuery query(db);
 		query.exec(QString("CREATE TABLE IF NOT EXISTS %1 "
-			"(ip TEXT,"
+			"(id INTEGER , "
+			"ip TEXT,"
 			"username TEXT,"
 			"password TEXT,"
 			"port TEXT,"
 			"type INTEGER,"
-			"id INTEGER,"
 			"PRIMARY KEY (\"id\"));").arg(TableName));
 		db.close();
 	}
@@ -138,23 +154,26 @@ void SiteManagement::clearUI()
 	ui->lineEdit_port->clear();
 }
 
-void SiteManagement::saveConfig()
+bool SiteManagement::saveConfig()
 {
+	bool success = false;
 	m_currentConfig.ftpType = (FtpType)ui->FtpType->currentIndex();
 	m_currentConfig.ip = ui->lineEdit_ip->text();
 	m_currentConfig.password = ui->lineEdit_password->text();
 	m_currentConfig.port = ui->lineEdit_port->text();
-	m_currentConfig.userName = ui->lineEdit_port->text();
+	m_currentConfig.userName = ui->lineEdit_username->text();
 	if (m_currentId==0)
 	{
 		if (checkExits())
 		{
 			
 			insertConfig();
+			success = true;
 		}
 		else
 		{
 			m_currentConfig = FtpConfig();
+			success = false;
 		}
 
 	}
@@ -162,9 +181,11 @@ void SiteManagement::saveConfig()
 	{
 		if (checkExits())
 		{
-			updateConfig();
+			updateConfig(m_currentId);
 		}
+		success = true;
 	}
+	return success;
 }
 
 bool SiteManagement::checkRight()
@@ -198,8 +219,27 @@ void SiteManagement::insertConfig()
 	
 }
 
-void SiteManagement::updateConfig()
+void SiteManagement::updateConfig(int id)
 {
+	QSqlDatabase db;
+	if (openDatabase(db, m_dbPath))
+	{
+		QSqlQuery query(db);
+		QString sql = "UPDATE %1 set ip = :ip,username = :username,"
+			"password = :password,port = :port,type = :type WHERE id = '%2'";
+		query.prepare(sql.arg(TableName, id));
+		query.bindValue(":ip", m_currentConfig.ip);
+		query.bindValue(":username", m_currentConfig.userName);
+		query.bindValue(":password", m_currentConfig.password);
+		query.bindValue(":port", m_currentConfig.port);
+		query.bindValue(":type", static_cast<int>(m_currentConfig.ftpType));
+		if (!query.exec())
+		{
+			auto a = query.lastError().text();
+			auto b = query.lastQuery();
+		}
+		db.close();
+	}
 }
 
 bool SiteManagement::checkExits()
@@ -219,5 +259,13 @@ bool SiteManagement::checkExits()
 
 void SiteManagement::deleteConfig(int id)
 {
+	QSqlDatabase db;
+	if (openDatabase(db, m_dbPath))
+	{
+		QSqlQuery query(db);
+		QString sql = QString(u8"DELETE FROM %1 WHERE id = %2").arg(TableName).arg(id);
+		query.exec(sql);
+		db.close();
+	}
 }
 
