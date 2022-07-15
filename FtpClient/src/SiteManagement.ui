@@ -178,10 +178,17 @@ QPushButton:hover{background-color:#E33D29;}</string>
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">QListView{background-color:#ffffff; border: 0px;font-size:20px;}
-QListView::item{margin-right:1px;}
+               <string notr="true">QListView{background-color:#ffffff; border: 0px;font-size:15px;}
+QListWidget::item{height:40px;padding-left:10px;}
 QListView::item:hover {background: #0096ff;color:white;}
-QListView::item:selected {background: #0096ff;color:white;}</string>
+QListView::item:selected {background: #0096ff;color:white;border-radius:12px;}
+QListWidget::item:!active{margin:5px 20px 1px 20px; }
+QListWidget::item:selected:!active{margin:0px 0px 0px 0px;}
+
+
+
+
+</string>
               </property>
               <property name="selectionMode">
                <enum>QAbstractItemView::SingleSelection</enum>
@@ -333,6 +340,9 @@ QListView::item:selected {background: #0096ff;color:white;}</string>
                    <family>微软雅黑</family>
                    <pointsize>12</pointsize>
                   </font>
+                 </property>
+                 <property name="echoMode">
+                  <enum>QLineEdit::Password</enum>
                  </property>
                 </widget>
                </item>
