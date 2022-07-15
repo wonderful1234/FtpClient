@@ -3,6 +3,7 @@ FtpControl::FtpControl(QObject *parent)
 	: QObject(parent)
 {
 	m_threadPool = new QThreadPool(this);
+	m_threadPool->setMaxThreadCount(MaxThreadCount);
 }
 FtpControl::~FtpControl()
 {
@@ -24,9 +25,11 @@ void FtpControl::taskFinish(FtpTask * task, bool success)
 	{
 		delete task;
 	}
+	emit signFinished(success);
 }
 
 void FtpControl::setProgrsee(qint64 bytesDone, qint64 bytesTota)
 {
-
+	auto progress = bytesDone * 1.0 / bytesTota * 100;
+	emit signProgress(progress);
 }

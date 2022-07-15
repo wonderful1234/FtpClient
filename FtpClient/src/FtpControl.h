@@ -2,6 +2,7 @@
 #include <QObject>
 #include <QThreadPool>
 #include "FtpTask.h"
+#define  MaxThreadCount  10
 class FtpControl : public QObject
 {
 	Q_OBJECT

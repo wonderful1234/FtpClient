@@ -9,7 +9,7 @@ SiteManagement::SiteManagement(QWidget *parent)
 	ui->setupUi(this);
 	init();
 	initFtp();
-	connect(ui->listWidget, &QListWidget::currentItemChanged, this, [&](QListWidgetItem *current, QListWidgetItem *previous) {
+	connect(ui->listWidget, &QListWidget::itemClicked, this, [&](QListWidgetItem *current) {
 		m_currentId =current->data(idRole).toInt();
 		m_currentConfig=m_listConfig.value(m_currentId);
 		ui->FtpType->setCurrentIndex(static_cast<int>(m_currentConfig.ftpType));
@@ -35,6 +35,13 @@ SiteManagement::SiteManagement(QWidget *parent)
 		clearUI();
 		m_currentConfig = FtpConfig();
 		m_currentId =0;
+		ui->listWidget->clearSelection();
+	});
+
+	connect(ui->btnDel, &QPushButton::clicked, this, [&]() {
+		if (m_listConfig.size() == 0)
+			return;
+
 	});
 }
 
@@ -208,5 +215,9 @@ bool SiteManagement::checkExits()
 		}
 	}
 	return success;
+}
+
+void SiteManagement::deleteConfig(int id)
+{
 }
 

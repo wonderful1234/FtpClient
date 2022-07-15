@@ -11,7 +11,6 @@ FtpTask::FtpTask(FtpControl * control, const FtpConfig& config,  const QString &
 	setAutoDelete(false);
 }
 
-
 void FtpTask::run()
 {
 	bool success = false;
@@ -78,8 +77,8 @@ bool FtpTask::listInfo()
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
 		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 5);
 		res = curl_easy_perform(curl);
+		curl_easy_cleanup(curl);
 	}
-	curl_easy_cleanup(curl);
 	if(CURLE_OK != res)
 		Log::getInstance()->logWarn(u8"连接服务器失败");
 	else 
@@ -120,11 +119,16 @@ bool FtpTask::uploadFile()
 					Log::getInstance()->logInfo(u8"文件上传成功");
 				else
 					Log::getInstance()->logWarn(u8"文件上传失败");
+				curl_easy_cleanup(curl);
 			}
-			curl_easy_cleanup(curl);
+			
 		}
 		else
 			Log::getInstance()->logWarn(u8"文件不存在");
 	}
 	return success;
 }
+
+
+
+

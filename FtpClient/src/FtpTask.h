@@ -11,7 +11,7 @@ protected:
 	inline QString ParseURL(const QString &filePath);
 	static int progressCallback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow);
 	static size_t ReadFromFileCallback(void *ptr, size_t size, size_t nmemb, void *stream);
-protected:
+private:
 	bool listInfo();
 	bool uploadFile();
 private:
