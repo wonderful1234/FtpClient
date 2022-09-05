@@ -62,6 +62,13 @@ size_t FtpTask::ReadFromFileCallback(void * ptr, size_t size, size_t nmemb, void
 	return 0;
 }
 
+size_t FtpTask::throw_away(void * ptr, size_t size, size_t nmemb, void * data)
+{
+	(void)ptr;
+	(void)data;
+	return (size_t)(size * nmemb);
+}
+
 bool FtpTask::listInfo()
 {
 	CURLcode res;
@@ -125,6 +132,7 @@ bool FtpTask::uploadFile()
 					if (remoteSize == localSize)
 					{
 						Log::getInstance()->logInfo(u8"文件上传成功");
+						success = true;
 					}
 					else
 						Log::getInstance()->logWarn(u8"文件上传失败");
@@ -149,7 +157,7 @@ qint64 FtpTask::getFileSize(const QString & remoteFile)
 		QString url = ParseURL(remoteFile);
 		curl_easy_setopt(curl, CURLOPT_URL, url.toLocal8Bit().data());
 		curl_easy_setopt(curl, CURLOPT_PORT, m_ftpConfig.port);
-		curl_easy_setopt(curl, CURLOPT_USERPWD, QString("%1:%2").arg(m_ftpConfig.username).arg(m_ftpConfig.password).toLocal8Bit().data());
+		curl_easy_setopt(curl, CURLOPT_USERPWD, QString("%1:%2").arg(m_ftpConfig.userName).arg(m_ftpConfig.password).toLocal8Bit().data());
 		curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
 		curl_easy_setopt(curl, CURLOPT_FILETIME, 1L);
 		curl_easy_setopt(curl, CURLOPT_HEADER, 0L);
