@@ -161,7 +161,7 @@ qint64 FtpTask::getFileSize(const QString & remoteFile)
 		curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
 		curl_easy_setopt(curl, CURLOPT_FILETIME, 1L);
 		curl_easy_setopt(curl, CURLOPT_HEADER, 0L);
-		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, throw_away);
+		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, FtpTask::throw_away);
 		CURLcode res = curl_easy_perform(curl);
 		if (CURLE_OK == res)
 		{

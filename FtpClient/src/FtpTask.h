@@ -11,9 +11,11 @@ protected:
 	inline QString ParseURL(const QString &filePath);
 	static int progressCallback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow);
 	static size_t ReadFromFileCallback(void *ptr, size_t size, size_t nmemb, void *stream);
+	static size_t throw_away(void * ptr, size_t size, size_t nmemb, void * data);
 private:
 	bool listInfo();
 	bool uploadFile();
+	qint64 getFileSize(const QString & remoteFile);
 private:
 	FtpConfig m_ftpConfig;
 	FtpControl * m_control;
